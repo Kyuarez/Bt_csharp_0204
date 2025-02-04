@@ -6,23 +6,18 @@
         //14 -> 26 : diamond
         //27 - 39 : clover
         //40 - 52 : spade
+        static char S_HEART = '♡';
+        static char S_DIAMOND = '◇';
+        static char S_CLOVER = '♣';
+        static char S_SPADE = '♠';
+        static char V_ACE = 'A';
+        static char V_JACK = 'J';
+        static char V_QUEEN = 'Q';
+        static char V_KING = 'K';
+
         static void Main(string[] args)
         {
             int[] deck = CreateArrayD1(52);
-
-            //Shuffle
-            //Random rnd = new Random();
-
-            //for (int i = 0; i < deck.Length * 10; i++) 
-            //{
-            //    int firstCardIndex = rnd.Next(0, deck.Length);
-            //    int secondCardIndex = rnd.Next(0, deck.Length);
-
-            //    int temp = deck[firstCardIndex];
-            //    deck[firstCardIndex] = deck[secondCardIndex];
-            //    deck[secondCardIndex] = temp;
-            //}
-
             Shuffle(ref deck);
             PrintTrumphCard(deck);
         }
@@ -59,16 +54,16 @@
                 switch (factorShape)
                 {
                     case 0:
-                        p_data += "Heart";
+                        p_data += S_HEART;
                         break;
                     case 1:
-                        p_data += "Diamond";
+                        p_data += S_DIAMOND;
                         break;
                     case 2:
-                        p_data += "Clover";
+                        p_data += S_CLOVER;
                         break;
                     case 3:
-                        p_data += "Spade";
+                        p_data += S_SPADE;
                         break;
                     default:
                         break;
@@ -77,16 +72,16 @@
                 switch (factor)
                 {
                     case 1:
-                        p_data += "_A";
+                        p_data += ("_" + V_ACE);
                         break;
                     case 11:
-                        p_data += "_J";
+                        p_data += ("_" + V_JACK);
                         break;
                     case 12:
-                        p_data += "_Q";
+                        p_data += ("_" + V_QUEEN);
                         break;
                     case 0:
-                        p_data += "_K";
+                        p_data += ("_" + V_KING);
                         break;
                     default:
                         p_data += "_" + factor.ToString();
@@ -96,6 +91,28 @@
             }
         }
 
+
+
+
+        #region REST
+
+
+        static void ShuffleTenTime(ref int[] array)
+        {
+            Random rnd = new Random();
+
+            for (int i = 0; i < array.Length * 10; i++)
+            {
+                int firstCardIndex = rnd.Next(0, array.Length);
+                int secondCardIndex = rnd.Next(0, array.Length);
+
+                int temp = array[firstCardIndex];
+                array[firstCardIndex] = array[secondCardIndex];
+                array[secondCardIndex] = temp;
+            }
+        }
+
+        
         static void ArrRnd01()
         {
             int tryCount = 8;
@@ -142,7 +159,6 @@
                 Console.Write(rndArr[i] + "\n");
             }
         }
-
-        
+        #endregion
     }
 }
