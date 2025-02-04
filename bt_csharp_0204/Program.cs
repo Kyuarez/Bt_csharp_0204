@@ -1,4 +1,6 @@
-﻿namespace bt_csharp_0204
+﻿using static System.Formats.Asn1.AsnWriter;
+
+namespace bt_csharp_0204
 {
     internal class Program
     {
@@ -34,8 +36,6 @@
 
         static void Main(string[] args)
         {
-            int index = 0;
-
             //card deck set
             int[] deck = CreateArrayD1(52);
             Shuffle(ref deck);
@@ -43,7 +43,6 @@
             //set computer v player one turn
             int[] playerCards = SetPlayerCards(deck, PlayerType.Player);
             int[] computerCards = SetPlayerCards(deck, PlayerType.Computer);
-
 
             PrintSingleGameOneTurn(computerCards, playerCards);
         }
@@ -97,16 +96,20 @@
             int aceCount = CalcAceCount(playerCards);
             int[] scoreArr = new int[(aceCount) == 0 ? 1 : (int)Math.Pow(2, aceCount)];
 
+            //ace count = 0
             for (int i = 0; i < scoreArr.Length; i++)
             {
                 int score = 0;
+                int aceIndex = 0;
                 for (int j = 0; j < playerCards.Length; j++)
                 {
                     int factor = playerCards[j] % 13;
                     switch (factor)
                     {
                         case 1: //A
-                            score += (aceCount - i) + (i * 11);
+                            int aceValue = ((i & (1 << aceIndex)) == 0) ? 1 : 11;
+                            score += aceValue;
+                            aceIndex++;
                             break;
                         case 11://J, Q, K
                         case 12:
@@ -178,10 +181,15 @@
         static bool IsPlayerWinSingle(int[] computerArr, int[] playerArr)
         {
             int computerMaxScore = 0;
-            int playerMaxScore = 0; 
+            int playerMaxScore = 0;
 
             for (int i = 0; i < computerArr.Length; i++)
             {
+                if (computerArr[i] > 21)
+                {
+                    continue;
+                }
+
                 if(computerMaxScore < computerArr[i])
                 {
                     computerMaxScore = computerArr[i];
@@ -189,6 +197,11 @@
             }
             for (int i = 0; i < playerArr.Length; i++)
             {
+                if (playerArr[i] > 21)
+                {
+                    continue;
+                }
+
                 if (playerMaxScore < playerArr[i])
                 {
                     playerMaxScore = playerArr[i];
