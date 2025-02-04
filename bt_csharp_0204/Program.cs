@@ -6,6 +6,23 @@
         //14 -> 26 : diamond
         //27 - 39 : clover
         //40 - 52 : spade
+
+        /* 블랙잭 룰
+         * 각각 카드 두 장 씩 받음. 
+         * 두 개의 카드 값 합이 21이면 블랙잭!
+         * 원하면 계속 한 장씩 뽑음.
+         * -> 최종적으로 21에 가장 가까운 사람이 승리
+         * -> 뽑다가 21을 넘어가면 Burst! 플레이어 패배
+         * -------------------------------------------
+         * K,Q,J는 10이고 A는 1또는 10이다.
+         */
+
+        public enum PlayerType
+        {
+            Player,
+            Computer,
+        }
+
         static char S_HEART = '♡';
         static char S_DIAMOND = '◇';
         static char S_CLOVER = '♣';
@@ -17,9 +34,18 @@
 
         static void Main(string[] args)
         {
+            int index = 0;
+
+            //card deck set
             int[] deck = CreateArrayD1(52);
             Shuffle(ref deck);
-            PrintTrumphCard(deck);
+
+            //set computer v player one turn
+            int[] playerCards = SetPlayerCards(deck, PlayerType.Player);
+            int[] computerCards = SetPlayerCards(deck, PlayerType.Computer);
+
+
+            PrintSingleGameOneTurn(computerCards, playerCards);
         }
 
         static int[] CreateArrayD1(int length)
@@ -45,9 +71,126 @@
             }
         }
 
-        static void PrintTrumphCard(int[] array) 
+        static int[] SetPlayerCards(int[] deck, PlayerType type)
         {
-            for (int i = 0; i < 8; i++)
+            int[] playerCards = new int[2];
+            if(type == PlayerType.Player)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    playerCards[i] = deck[i];
+                }
+            }
+            else if(type == PlayerType.Computer)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    playerCards[i] = deck[i + 2];
+                }
+            }
+            return playerCards;
+        }
+
+        static int[] CalcBlackjackScoreArr(int[] playerCards)
+        {
+            //arr length : ace count
+            int aceCount = CalcAceCount(playerCards);
+            int[] scoreArr = new int[(aceCount) == 0 ? 1 : (int)Math.Pow(2, aceCount)];
+
+            for (int i = 0; i < scoreArr.Length; i++)
+            {
+                int score = 0;
+                for (int j = 0; j < playerCards.Length; j++)
+                {
+                    int factor = playerCards[j] % 13;
+                    switch (factor)
+                    {
+                        case 1: //A
+                            score += (aceCount - i) + (i * 11);
+                            break;
+                        case 11://J, Q, K
+                        case 12:
+                        case 0:
+                            score += 10;
+                            break;
+                        default:
+                            score += factor;
+                            break;
+                    }
+                }
+                scoreArr[i] = score;
+            }
+            return scoreArr;
+        }
+
+        static int CalcAceCount(int[] playerCards)
+        {
+            int aceCount = 0;
+            for (int i = 0; i < playerCards.Length; i++)
+            {
+                if (playerCards[i] % 13 == 1)
+                {
+                    aceCount++;
+                }
+            }
+            return aceCount;
+        }
+
+        static void PrintSingleGameOneTurn(int[] computerCardArr, int[] playerCardArr)
+        {
+
+            int[] computerScoreArr = CalcBlackjackScoreArr(computerCardArr);
+            int[] playerScoreArr = CalcBlackjackScoreArr(playerCardArr);
+
+            Console.WriteLine("컴퓨터 카드");
+            PrintTrumphCard(computerCardArr);
+            Console.WriteLine("컴퓨터 점수 가능성");
+            for (int i = 0; i < computerScoreArr.Length; i++)
+            {
+                Console.Write(computerScoreArr[i] + "\t");
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("-------------------------------------");
+
+            Console.WriteLine("플레이어 카드");
+            PrintTrumphCard(playerCardArr);
+            Console.WriteLine("플레이어 점수 가능성");
+            for (int i = 0; i < playerScoreArr.Length; i++)
+            {
+                Console.Write(playerScoreArr[i] + "\t");
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("-------------------------------------");
+            Console.WriteLine("[결과]");
+            if(true == IsPlayerWinSingle(computerScoreArr, playerScoreArr))
+            {
+                Console.WriteLine("플레이어 승리");
+            }
+            else
+            {
+                Console.WriteLine("컴퓨터 승리");
+            }
+
+        }
+
+        static bool IsPlayerWinSingle(int[] computerArr, int[] playerArr)
+        {
+            int minLength = Math.Min(computerArr.Length, playerArr.Length); // 두 배열 중 짧은 길이만큼 반복
+            for (int i = 0; i < minLength; i++)
+            {
+                if (playerArr[i] >= computerArr[i])
+                {
+                    return true; 
+                }
+            }
+            return false; 
+        }
+
+        static void PrintTrumphCard(int[] array)
+        {
+            for (int i = 0; i < array.Length; i++)
             {
                 string p_data = "";
                 int factorShape = array[i] % 4;
@@ -87,16 +230,12 @@
                         p_data += "_" + factor.ToString();
                         break;
                 }
-                Console.Write(p_data + "\n");
+                Console.Write(p_data + "\t");
             }
+            Console.WriteLine();
         }
 
-
-
-
         #region REST
-
-
         static void ShuffleTenTime(ref int[] array)
         {
             Random rnd = new Random();
