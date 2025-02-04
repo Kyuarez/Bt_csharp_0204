@@ -144,6 +144,7 @@ namespace bt_csharp_0204
 
             int[] computerScoreArr = CalcBlackjackScoreArr(computerCardArr);
             int[] playerScoreArr = CalcBlackjackScoreArr(playerCardArr);
+            bool isBlackjack = false;
 
             Console.WriteLine("컴퓨터 카드");
             PrintTrumphCard(computerCardArr);
@@ -167,18 +168,23 @@ namespace bt_csharp_0204
             Console.WriteLine();
             Console.WriteLine("-------------------------------------");
             Console.WriteLine("[결과]");
-            if(true == IsPlayerWinSingle(computerScoreArr, playerScoreArr))
+            if(true == IsPlayerWinSingle(computerScoreArr, playerScoreArr, ref isBlackjack))
             {
-                Console.WriteLine("플레이어 승리");
+                Console.Write("플레이어 승리");
             }
             else
             {
-                Console.WriteLine("컴퓨터 승리");
+                Console.Write("컴퓨터 승리");
+            }
+
+            if (isBlackjack == true)
+            {
+                Console.Write("(블랙잭)");
             }
 
         }
 
-        static bool IsPlayerWinSingle(int[] computerArr, int[] playerArr)
+        static bool IsPlayerWinSingle(int[] computerArr, int[] playerArr, ref bool isBlackjack)
         {
             int computerMaxScore = 0;
             int playerMaxScore = 0;
@@ -206,6 +212,12 @@ namespace bt_csharp_0204
                 {
                     playerMaxScore = playerArr[i];
                 }
+            }
+
+            //check blackjack
+            if(playerMaxScore == 21 || computerMaxScore == 21)
+            {
+                isBlackjack = true;
             }
 
             return playerMaxScore >= computerMaxScore; 
