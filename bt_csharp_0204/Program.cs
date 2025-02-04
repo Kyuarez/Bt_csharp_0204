@@ -72,19 +72,19 @@ namespace bt_csharp_0204
 
         static int[] SetPlayerCards(int[] deck, PlayerType type)
         {
-            int[] playerCards = new int[2];
+            int[] playerCards = new int[3];
             if(type == PlayerType.Player)
             {
-                for (int i = 0; i < 2; i++)
+                for (int i = 0; i < 3; i++)
                 {
                     playerCards[i] = deck[i];
                 }
             }
             else if(type == PlayerType.Computer)
             {
-                for (int i = 0; i < 2; i++)
+                for (int i = 0; i < 3; i++)
                 {
-                    playerCards[i] = deck[i + 2];
+                    playerCards[i] = deck[i + 3];
                 }
             }
             return playerCards;
@@ -151,6 +151,10 @@ namespace bt_csharp_0204
             Console.WriteLine("컴퓨터 점수 가능성");
             for (int i = 0; i < computerScoreArr.Length; i++)
             {
+                if (computerScoreArr[i] > 21)
+                {
+                    Console.Write("(Bust)");
+                }
                 Console.Write(computerScoreArr[i] + "\t");
             }
 
@@ -162,6 +166,10 @@ namespace bt_csharp_0204
             Console.WriteLine("플레이어 점수 가능성");
             for (int i = 0; i < playerScoreArr.Length; i++)
             {
+                if (playerScoreArr[i] > 21)
+                {
+                    Console.Write("(Bust)");
+                }
                 Console.Write(playerScoreArr[i] + "\t");
             }
 
@@ -186,6 +194,7 @@ namespace bt_csharp_0204
 
         static bool IsPlayerWinSingle(int[] computerArr, int[] playerArr, ref bool isBlackjack)
         {
+            int playerMinScore = playerArr[0];
             int computerMaxScore = 0;
             int playerMaxScore = 0;
 
@@ -212,6 +221,12 @@ namespace bt_csharp_0204
                 {
                     playerMaxScore = playerArr[i];
                 }
+            }
+
+            //check player Burst
+            if(playerMinScore > 21)
+            {
+                return false;
             }
 
             //check blackjack
