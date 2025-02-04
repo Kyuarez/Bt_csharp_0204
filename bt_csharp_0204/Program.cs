@@ -177,15 +177,25 @@
 
         static bool IsPlayerWinSingle(int[] computerArr, int[] playerArr)
         {
-            int minLength = Math.Min(computerArr.Length, playerArr.Length); // 두 배열 중 짧은 길이만큼 반복
-            for (int i = 0; i < minLength; i++)
+            int computerMaxScore = 0;
+            int playerMaxScore = 0; 
+
+            for (int i = 0; i < computerArr.Length; i++)
             {
-                if (playerArr[i] >= computerArr[i])
+                if(computerMaxScore < computerArr[i])
                 {
-                    return true; 
+                    computerMaxScore = computerArr[i];
                 }
             }
-            return false; 
+            for (int i = 0; i < playerArr.Length; i++)
+            {
+                if (playerMaxScore < playerArr[i])
+                {
+                    playerMaxScore = playerArr[i];
+                }
+            }
+
+            return playerMaxScore >= computerMaxScore; 
         }
 
         static void PrintTrumphCard(int[] array)
