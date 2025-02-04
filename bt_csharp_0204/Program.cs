@@ -54,24 +54,42 @@
         {
             for (int i = 0; i < 8; i++)
             {
-                int data = array[i] % 13;
                 string p_data = "";
-                switch (data)
+                int factorShape = array[i] % 4;
+                switch (factorShape)
                 {
+                    case 0:
+                        p_data += "Heart";
+                        break;
                     case 1:
-                        p_data = "A";
+                        p_data += "Diamond";
                         break;
-                    case 11:
-                        p_data = "J";
+                    case 2:
+                        p_data += "Clover";
                         break;
-                    case 12:
-                        p_data = "Q";
-                        break;
-                    case 13:
-                        p_data = "K";
+                    case 3:
+                        p_data += "Spade";
                         break;
                     default:
-                        p_data = array[i].ToString();
+                        break;
+                }
+                int factor = array[i] % 13;
+                switch (factor)
+                {
+                    case 1:
+                        p_data += "_A";
+                        break;
+                    case 11:
+                        p_data += "_J";
+                        break;
+                    case 12:
+                        p_data += "_Q";
+                        break;
+                    case 0:
+                        p_data += "_K";
+                        break;
+                    default:
+                        p_data += "_" + factor.ToString();
                         break;
                 }
                 Console.Write(p_data + "\n");
