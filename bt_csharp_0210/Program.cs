@@ -1,5 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using System.Text.Json;
+﻿using System;
+using System.Reflection;
 
 namespace bt_csharp_0210
 {
@@ -298,13 +298,16 @@ namespace bt_csharp_0210
     {
         static void Main(string[] args)
         {
-            int a = 1;
-            
+            Type type = (typeof(Int32));
 
-            TKPixel[] carImg = new TKPixel[3];
-            carImg[0] = new TKPixel(new PixelVertex(0, 0), new PixelColor(165, 55, 128));
-            carImg[1] = new TKPixel(new PixelVertex(0, 1), new PixelColor(133, 28, 182));
-            carImg[2] = new TKPixel(new PixelVertex(0, 2), new PixelColor(115, 136, 63));
+            Console.WriteLine(type.Name);
+            Console.WriteLine(type.BaseType.ToString());
+            Console.WriteLine(type.BaseType.BaseType.ToString());
+
+            //TKPixel[] carImg = new TKPixel[3];
+            //carImg[0] = new TKPixel(new PixelVertex(0, 0), new PixelColor(165, 55, 128));
+            //carImg[1] = new TKPixel(new PixelVertex(0, 1), new PixelColor(133, 28, 182));
+            //carImg[2] = new TKPixel(new PixelVertex(0, 2), new PixelColor(115, 136, 63));
         }
     }
 }   
