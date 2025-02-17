@@ -11,8 +11,29 @@ namespace bt_csharp_0217
 {
     public class Engine
     {
+        #region Singleton
+        private Engine() 
+        {
+
+        }
+
+        protected static Engine _instance;
+        public static Engine Instance
+        {
+            get
+            {
+                if(_instance == null)
+                {
+                    _instance = new Engine();
+                }
+                return _instance;
+            }
+        }
+
+        #endregion
+
+
         protected bool isRunning = true;
-        protected ConsoleKeyInfo keyInfo;
 
         public void Load()
         {
@@ -38,36 +59,36 @@ namespace bt_csharp_0217
                 {
                     if( scene[y][x] == '*')
                     {
-                        Wall wall = new Wall(x, y, scene[x][y]);
+                        Wall wall = new Wall(x, y, scene[y][x]);
                         world.Instantiate(wall);
                     }
                     else if (scene[y][x] == ' ')
                     {
-                        Floor floor = new Floor(x, y, scene[x][y]);
+                        Floor floor = new Floor(x, y, scene[y][x]);
                         world.Instantiate(floor);
                     }
                     else if (scene[y][x] == 'P')
                     {
-                        Player player = new Player(x, y, scene[x][y]);
+                        Player player = new Player(x, y, scene[y][x]);
                         world.Instantiate(player);
                     }
                     else if (scene[y][x] == 'M')
                     {
-                        Monster monster = new Monster(x, y, scene[x][y]);
+                        Monster monster = new Monster(x, y, scene[y][x]);
                         world.Instantiate(monster);
                     }
                     else if (scene[y][x] == 'G')
                     {
-                        Goal goal = new Goal(x, y, scene[x][y]);
+                        Goal goal = new Goal(x, y, scene[y][x]);
                         world.Instantiate(goal);
                     }
                 }
             }
         }
 
-        public void Input()
+        public void ProcessInput()
         {
-            keyInfo = Console.ReadKey();
+            Input.Process();
         }
 
         protected void Update()
@@ -77,6 +98,7 @@ namespace bt_csharp_0217
 
         protected void Render()
         {
+            Console.Clear();
             world.Render();
         }
 
@@ -84,8 +106,9 @@ namespace bt_csharp_0217
         {
             while (isRunning)
             {
-                Input();
-
+                ProcessInput();
+                Update();
+                Render();
             }
         }
 

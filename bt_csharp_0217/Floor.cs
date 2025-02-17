@@ -15,5 +15,10 @@ namespace bt_csharp_0217
             this.shape = shape;
         }
 
+        public override void Render()
+        {
+            
+        }
+
     }
 }

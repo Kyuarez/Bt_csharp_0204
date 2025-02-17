@@ -15,5 +15,26 @@ namespace bt_csharp_0217
             this.shape = shape;
         }
 
+        public override void Update() 
+        {
+            if (true == Input.GetKeyDown(ConsoleKey.DownArrow) || true == Input.GetKeyDown(ConsoleKey.S))
+            {
+                y++;
+            }
+            else if(true == Input.GetKeyDown(ConsoleKey.UpArrow) || true == Input.GetKeyDown(ConsoleKey.W))
+            {
+                y--;
+            }
+            else if (true == Input.GetKeyDown(ConsoleKey.LeftArrow) || true == Input.GetKeyDown(ConsoleKey.A))
+            {
+                x--;
+            }
+            else if (true == Input.GetKeyDown(ConsoleKey.RightArrow) || true == Input.GetKeyDown(ConsoleKey.D))
+            {
+                x++;
+            }
+
+        }
+
     }
 }
