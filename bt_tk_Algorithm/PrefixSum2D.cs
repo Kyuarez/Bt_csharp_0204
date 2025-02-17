@@ -8,22 +8,29 @@ namespace bt_tk_Algorithm
 {
     public class PrefixSum2D
     {
-        private int[][] originArr;
-        private int[][] prefixArr;
+        private int[,] originArr;
+        private int[,] prefixArr;
 
-        public PrefixSum2D(int[][] arr)
+        public PrefixSum2D(int[,] arr)
         {
             originArr = arr;
             GetPrefixSum();
         }
 
-        private int[][] GetPrefixSum()
+        private int[,] GetPrefixSum()
         {
-            for (int i = 0; i < originArr.Length; i++)
-            {
-                for(int j = 0; j < prefixArr.Length; j++)
-                {
+            int rows = originArr.GetLength(0);
+            int cols = originArr.GetLength(1);
+            prefixArr = new int[rows + 1, cols + 1];
 
+            for (int i = 1; i <= rows; i++)
+            {
+                for(int j = 1; j <= cols; j++)
+                {
+                    prefixArr[i, j] = originArr[i -1, j - 1]
+                        + prefixArr[i - 1, j]
+                        + prefixArr[i, j - 1]
+                        - prefixArr[i - 1, j - 1];
                 }
             }
 
@@ -32,7 +39,10 @@ namespace bt_tk_Algorithm
 
         public int GetSectionSum(int r1, int c1, int r2, int c2)
         {
-            return 0;
+            return prefixArr[r2, c2]
+                - prefixArr[r1 - 1, c2]
+                - prefixArr[r2, c1 - 1]
+                + prefixArr[r1 - 1, c1 - 1];
         }
     }
 }
