@@ -33,6 +33,5 @@ namespace bt_csharp_0217
                 gameObjects[i].Render();
             }
         }
-
     }
 }
